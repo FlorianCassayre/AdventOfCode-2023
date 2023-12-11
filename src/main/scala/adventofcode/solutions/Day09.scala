@@ -4,7 +4,7 @@ import adventofcode.Definitions.*
 
 @main def Day09 = Day(9) { (input, part) =>
 
-  val histories = input.toLines.map(_.split(" ").map(_.toInt).toVector).toVector
+  val histories = input.toLines.map(_.split(" ").map(_.toInt).toSeq)
 
   def differences(seq: Seq[Int]): Seq[Seq[Int]] =
     if seq.forall(_ == 0) then

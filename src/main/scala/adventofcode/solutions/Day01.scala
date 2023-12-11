@@ -12,6 +12,6 @@ import adventofcode.Definitions.*
 
   val digits = Seq("one", "two", "three", "four", "five", "six", "seven", "eight", "nine")
 
-  part(2) = sum(s => asDigit(s).orElse(Some(digits.indexWhere(d => s.startsWith(d)) + 1).filter(_ > 0)))
+  part(2) = sum(s => asDigit(s).orElse(Some(digits.indexWhere(s.startsWith) + 1).filter(_ > 0)))
 
 }

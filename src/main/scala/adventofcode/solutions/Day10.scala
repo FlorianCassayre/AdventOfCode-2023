@@ -6,7 +6,6 @@ import adventofcode.Definitions.*
 
   case class Vec(i: Int, j: Int):
     inline def +(that: Vec): Vec = Vec(i + that.i, j + that.j)
-
     inline def *(v: Int): Vec = Vec(i * v, j * v)
     def opposite: Vec = Vec(-i, -j)
   val around =

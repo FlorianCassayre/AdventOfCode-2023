@@ -8,11 +8,11 @@ import adventofcode.Definitions.*
 
   val races = input.toLines match
     case Seq(s"Time: $times", s"Distance: $distances") =>
-      def parse(s: String): Seq[Long] = s.trim.split(" +").map(_.toLong)
-      (parse(times).zip(parse(distances)).map((time, distance) => Race(time, distance)))
+      def parse(s: String): Seq[Long] = s.trim.split(" +").toSeq.map(_.toLong)
+      parse(times).zip(parse(distances)).map(Race.apply)
 
   def count(race: Race): Long =
-    val sqrtDelta = Math.sqrt(race.time * race.time - 4 * race.distance)
+    val sqrtDelta = Math.sqrt((race.time * race.time - 4 * race.distance).toDouble)
     val (min, max) = ((race.time - sqrtDelta) / 2, (race.time + sqrtDelta) / 2)
     (min.ceil.toLong to max.floor.toLong).size
 

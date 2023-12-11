@@ -24,8 +24,8 @@ import scala.collection.immutable.NumericRange
           triplets.map {
             case s"$destinationStart $sourceStart $length" => Mapping(destinationStart.toLong, sourceStart.toLong, length.toLong)
           }
-      )
-      Almanac(seeds.split(" ").map(_.toLong), maps)
+      ).toSeq
+      Almanac(seeds.split(" ").map(_.toLong).toSeq, maps)
 
   def convert(seeds: Seq[Long], map: Seq[Mapping]): Seq[Long] =
     seeds.map(seed => map.view.flatMap(_.convert(seed)).headOption.getOrElse(seed))

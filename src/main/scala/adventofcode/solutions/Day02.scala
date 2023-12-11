@@ -9,7 +9,7 @@ import adventofcode.Definitions.*
   val games = input.toLines.map {
     case s"Game $i: $s" => Game(
       i.toInt,
-      s.split("; ").map(_.split(", ").map(_.split(" ")).map(p => p.last -> p.head.toInt).toMap)
+      s.split("; ").map(_.split(", ").map(_.split(" ")).map(p => p.last -> p.head.toInt).toMap).toSeq
     )
   }
 

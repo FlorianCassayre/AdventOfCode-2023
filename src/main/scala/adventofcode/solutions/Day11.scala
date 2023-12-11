@@ -14,11 +14,9 @@ import adventofcode.Definitions.*
   })
 
   def compute(multiplier: Int): Long =
-    def indexMapper(map: IndexedSeq[IndexedSeq[Boolean]]): Map[Int, Int] =
-      Seq.unfold((0, map.map(_.exists(identity)))) {
-        case (i, b +: t) => Some((i, (i + (if b then 1 else multiplier), t)))
-        case _ => None
-      }.zipWithIndex.map(_.swap).toMap
+    def indexMapper(map: IndexedSeq[IndexedSeq[Boolean]]): IndexedSeq[Int] =
+      map.map(_.exists(identity))
+        .scanLeft(0)((i, b) => i + (if b then 1 else multiplier))
     val (rows, columns) = (indexMapper(map), indexMapper(map.transpose))
     map.zipWithIndex.flatMap((row, i) => row.zipWithIndex.collect { case (true, j) => Vec(i, j) })
       .map(vec => Vec(rows(vec.i), columns(vec.j)))
