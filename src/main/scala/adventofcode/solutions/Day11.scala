@@ -5,7 +5,7 @@ import adventofcode.Definitions.*
 @main def Day11 = Day(11) { (input, part) =>
 
   case class Vec(i: Int, j: Int):
-    inline def -(that: Vec): Vec = Vec(i - that.i, j - that.j)
+    infix def -(that: Vec): Vec = Vec(i - that.i, j - that.j)
     def manhattan: Int = i.abs + j.abs
 
   val map = input.toLines.map(_.map {

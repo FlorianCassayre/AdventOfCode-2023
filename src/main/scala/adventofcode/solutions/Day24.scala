@@ -32,30 +32,27 @@ import adventofcode.Definitions.*
   case class Stone(position: Vec, velocity: Vec):
     def apply(v: Rational): Vec = position + velocity * v
 
-  def gaussianElimination(matrix: IndexedSeq[IndexedSeq[Rational]]): IndexedSeq[IndexedSeq[Rational]] = {
+  def gaussianElimination(matrix: IndexedSeq[IndexedSeq[Rational]]): IndexedSeq[IndexedSeq[Rational]] =
     val (m, n) = (matrix.size, matrix.head.size)
     val (reducedMatrix, _) = (0 until m).foldLeft((matrix, -1)) { case ((matrix1, r), j) =>
       val k = (r + 1 until m).maxBy(i => matrix1(i)(j).abs)
       val pivot = matrix1(k)(j)
-      if (pivot.abs != Zero) {
+      if pivot.abs != Zero then
         val r1 = r + 1
         val matrix2 = (0 until n).foldLeft(matrix1)((current, l) => current.updated(k, current(k).updated(l, current(k)(l) / pivot)))
         val matrix3 = (0 until n).foldLeft(matrix2)((current, l) => current.updated(k, current(k).updated(l, current(r1)(l))).updated(r1, current(r1).updated(l, current(k)(l))))
         val matrix4 = (0 until m).foldLeft(matrix3) { (current, i) =>
           val v = current(i)(j)
-          if (i != r1) {
+          if i != r1 then
             (0 until n).foldLeft(current)((current, l) => current.updated(i, current(i).updated(l, current(i)(l) - current(r1)(l) * v)))
-          } else {
+          else
             current
-          }
         }
         (matrix4, r1)
-      } else {
+      else
         (matrix1, r)
-      }
     }
     reducedMatrix
-  }
 
   val stones = input.toLines.map {
     case s"$position @ $velocity" =>
@@ -85,8 +82,35 @@ import adventofcode.Definitions.*
       .exists((s, t) => Seq(a(s), b(t)).forall(inXY))
     )
 
-  // (third party tool)
+  val dimensions = 0 until 3
 
-  part(2) = 983620716335751L
+  // Equations by Sebastiano Tronto
+  val equations = for
+    k <- dimensions.reverse
+    i <- dimensions.tail
+    init = Seq[Stone => Vec](_.velocity, _.position).zipWithIndex.flatMap((t, idx) => dimensions.map { j =>
+      if j != k then
+        val b0 = dimensions.filter(_ != k).head == j
+        val b1 = idx != 0
+        val b = b0 ^ b1
+        val d = (dimensions.take(k) ++ dimensions.drop(k + 1))(if b0 then 1 else 0)
+        val pair = (t(stones(0)).toIndexedSeq(d), t(stones(i)).toIndexedSeq(d))
+        val (l0, l1) = if b then pair else pair.swap
+        l0 - l1
+      else
+        Rational(0)
+    })
+    last =
+      val d = dimensions.take(k) ++ dimensions.drop(k + 1)
+      Seq(stones(0), stones(i))
+        .map { s =>
+          val (p, v) = (s.position.toIndexedSeq, s.velocity.toIndexedSeq)
+          val (a, b) = (d(0), d(1))
+          p(b) * v(a) - p(a) * v(b)
+        }
+        .reduce(_ - _)
+  yield (init :+ last).toIndexedSeq
+
+  part(2) = -gaussianElimination(equations).transpose.last.take(3).reduce(_ + _).numerator
 
 }

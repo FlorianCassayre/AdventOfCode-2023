@@ -5,8 +5,8 @@ import adventofcode.Definitions.*
 @main def Day16 = Day(16) { (input, part) =>
 
   case class Vec(i: Int, j: Int):
-    inline def +(that: Vec): Vec = Vec(i + that.i, j + that.j)
-    inline def *(v: Int): Vec = Vec(i * v, j * v)
+    infix def +(that: Vec): Vec = Vec(i + that.i, j + that.j)
+    infix def *(v: Int): Vec = Vec(i * v, j * v)
     def dot(that: Vec): Int = i * that.i + j * that.j
   case class Beam(position: Vec, direction: Vec):
     def moved: Beam = copy(position = position + direction)

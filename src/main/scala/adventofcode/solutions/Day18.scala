@@ -5,8 +5,8 @@ import adventofcode.Definitions.*
 @main def Day18 = Day(18) { (input, part) =>
 
   case class Vec(i: Int, j: Int):
-    inline def +(that: Vec): Vec = Vec(i + that.i, j + that.j)
-    inline def *(v: Int): Vec = Vec(i * v, j * v)
+    infix def +(that: Vec): Vec = Vec(i + that.i, j + that.j)
+    infix def *(v: Int): Vec = Vec(i * v, j * v)
     def cw: Vec = Vec(j, -i)
     def ccw: Vec = Vec(-j, i)
 
